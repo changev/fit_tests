@@ -470,6 +470,7 @@ def get_bmc_ips():
     idlist = [] # list of unique dcmi node IDs
     # If we have already done this, use that list
     if len(BMC_LIST) == 0:
+        remote_shell('nmap -n -sP 172.31.128.0/24')
         ipscan = remote_shell('arp')['stdout'].split()
         for ipaddr in ipscan:
             if ipaddr[0:3] == "172" and remote_shell('ping -c 1 -w 5 ' + ipaddr)['exitcode'] == 0:

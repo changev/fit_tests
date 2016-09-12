@@ -90,7 +90,7 @@
   },
   "ports": {
     "_comment": "These are the northbound rest API port assignments",
-    "http": 8080,
-    "https": 443
+    "http": 9090 ,
+    "https": 9093
   }
 }
