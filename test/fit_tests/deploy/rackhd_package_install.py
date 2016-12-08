@@ -70,13 +70,7 @@ class rackhd_package_install(fit_common.unittest.TestCase):
 
     def test03_run_ansible_installer(self):
         print "**** Run RackHD Ansible installer."
-        # workaround for bug RAC-800
-        if fit_common.remote_shell(PROXYVARS +   "cd ~/rackhd/packer/ansible/;"
-                                                 "ansible-playbook -i 'local,' -c local rackhd_package.yml",
-                                                 timeout=2000,
-                                                 )['exitcode'] !=0:
-            fit_common.remote_shell("cp /root/config_isc-dhcp-server.sh ~/")
-            self.assertEqual(fit_common.remote_shell(PROXYVARS +
+        self.assertEqual(fit_common.remote_shell(PROXYVARS +
                                                  "cd ~/rackhd/packer/ansible/;"
                                                  "ansible-playbook -i 'local,' -c local rackhd_package.yml",
                                                  timeout=2000,
