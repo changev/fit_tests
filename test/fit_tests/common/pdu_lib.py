@@ -66,7 +66,14 @@ def config_power_interface():
     if remote_shell('ping -c 1 192.168.1.254')['exitcode'] == 0:
         return True
 
-    iflist = remote_shell("ifconfig -s -a | tail -n +2 | awk \\\'{print \\\$1}\\\' |grep -v lo")['stdout'].split()
+    # collect nic names
+    getifs = remote_shell("ifconfig -s -a |tail -n +2 |grep -v -e Iface -e lo -e docker")
+    # clean out login stuff
+    splitifs = getifs['stdout'].split('\n')
+    iflist = [] # array of valid eth ports
+    for item in splitifs:
+        if "assword" not in item and item.split(" ")[0]:
+            iflist.append(item.split(" ")[0])
 
     # eth3 is power port in bare-metal eth2 is power interface in VM
     try:
@@ -74,12 +81,10 @@ def config_power_interface():
     except:
         print "Failed to find power interface"
         return False
-
-    if iflist[1] != "":
-        power_if = iflist[8]
     else:
-        print "Failed to find power interface"
-        return False
+        power_if = iflist[1]
+    if iflist[2] != "":
+        power_if = iflist[2]
 
     cmd = "ip addr add {0}/{1} broadcast {2} dev {3}".format(ORA_POWER_IP,
                                                              ORA_POWER_NETMASK,

@@ -130,7 +130,7 @@ class rackhd_source_install(fit_common.unittest.TestCase):
     def test04_install_network_config(self):
         print "**** Installing RackHD network config."
         # collect nic names
-        getifs = fit_common.remote_shell("ifconfig -s -a |tail -n +2 |grep -v -e Iface -e lo")
+        getifs = fit_common.remote_shell("ifconfig -s -a |tail -n +2 |grep -v -e Iface -e lo -e docker")
         # clean out login stuff
         splitifs = getifs['stdout'].split('\n')
         ifslit = [] # array of valid eth ports
