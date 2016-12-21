@@ -10,7 +10,7 @@ import os
 import sys
 import subprocess
 # set path to common libraries
-sys.path.append(subprocess.check_output("git rev-parse --show-toplevel", shell=True).rstrip("\n") + "/test/fit_tests/common")
+sys.path.append(subprocess.check_output("git rev-parse --show-toplevel", shell=True).rstrip("\n") + "/test/common")
 import fit_common
 
 
@@ -58,7 +58,7 @@ class rackhd20_api_nodes(fit_common.unittest.TestCase):
                 self.assertGreater(len(api_data['json'][item]), 0, item + ' field error')
 
     def test_api_20_create_delete_node(self):
-        data_payload = {"name": "testnode"}
+        data_payload = {"name": "testnode", "type": "compute"}
         api_data = fit_common.rackhdapi("/api/2.0/nodes", action='post', payload=data_payload)
         self.assertEqual(api_data['status'], 201, 'Incorrect HTTP return code, expected 201, got:' + str(api_data['status']))
         nodeid = api_data['json']['id']
@@ -111,7 +111,7 @@ class rackhd20_api_nodes(fit_common.unittest.TestCase):
 
     def test_api_20_nodes_ID_obmsettings(self):
         # create fake node
-        data_payload = {"name": "fakenode"}
+        data_payload = {"name": "fakenode", "type": "compute"}
         api_data = fit_common.rackhdapi("/api/2.0/nodes", action="post",
                                            payload=data_payload)
         self.assertEqual(api_data['status'], 201, 'Incorrect HTTP return code, expected 201, got:' + str(api_data['status']))
